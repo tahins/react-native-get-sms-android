@@ -300,4 +300,22 @@ public class SmsModule extends ReactContextBaseJavaModule /*implements LoaderMan
             sendCallback(e.getMessage(), false);
         }
     }
+
+    @ReactMethod
+    public void updateReadStatus(Integer id, boolean readStatus, final Callback errorCallback, final Callback successCallback) {
+        try {
+            ContentValues values = new ContentValues();
+            values.put("read", readStatus);
+            int res = context.getContentResolver().update(Uri.parse("content://sms/" + id), values, null, null);
+            if (res > 0) {
+                successCallback.invoke("OK");
+            } else {
+                errorCallback.invoke("SMS not found");
+            }
+            return;
+        } catch (Exception e) {
+            errorCallback.invoke(e.getMessage());
+            return;
+        }
+    }
 }
