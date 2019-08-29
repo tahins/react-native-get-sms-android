@@ -303,9 +303,18 @@ public class SmsModule extends ReactContextBaseJavaModule /*implements LoaderMan
 
     @ReactMethod
     public void updateReadStatus(Integer id, boolean readStatus, final Callback errorCallback, final Callback successCallback) {
+        updateBooleanValue(id, "read", readStatus, errorCallback, successCallback);
+    }
+
+    @ReactMethod
+    public void updateSpamStatus(Integer id, boolean spamStatus, final Callback errorCallback, final Callback successCallback) {
+        updateBooleanValue(id, "spam_report", spamStatus, errorCallback, successCallback);
+    }
+
+    private void updateBooleanValue(Integer id, String key, boolean boolValue, final Callback errorCallback, final Callback successCallback) {
         try {
             ContentValues values = new ContentValues();
-            values.put("read", readStatus);
+            values.put(key, boolValue);
             int res = context.getContentResolver().update(Uri.parse("content://sms/" + id), values, null, null);
             if (res > 0) {
                 successCallback.invoke("OK");
